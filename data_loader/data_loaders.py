@@ -7,9 +7,8 @@ class ImageDataLoader(BaseDataLoader):
     Loading the data from the given path
     """
     def __init__(self, data_dir, batch_size, shuffle=True, validation_split=0.0, num_workers=1, training=True):
-        trsfm = data_transform.image_transforms
+        trsfm = data_transform.image_transforms.get('train')
         self.data_dir = data_dir
-
 
         #self.dataset = datasets.MNIST(self.data_dir, train=training, download=True, transform=trsfm)
 

@@ -21,13 +21,6 @@ np.random.seed(SEED)
 def main(config):
     logger = config.get_logger('train')
 
-    # setup data_loader instances
-
-    #>>>>>>>>>>>
-
-    # Here comes the part to load the image data instead of downloading.
-
-    #>>>>>>>>>>>>
     data_loader = config.init_obj('data_loader', module_data)
 
     valid_data_loader = data_loader.split_validation()

@@ -81,10 +81,6 @@ class ConfigParser:
         """
         Finds a function handle with the name given as 'type' in config, and returns the
         instance initialized with corresponding arguments given.
-
-        `object = config.init_obj('name', module, a, b=1)`
-        is equivalent to
-        `object = module.name(a, b=1)`
         """
         module_name = self[name]['type']
         module_args = dict(self[name]['args'])
@@ -96,10 +92,6 @@ class ConfigParser:
         """
         Finds a function handle with the name given as 'type' in config, and returns the
         function with given arguments fixed with functools.partial.
-
-        `function = config.init_ftn('name', module, a, b=1)`
-        is equivalent to
-        `function = lambda *args, **kwargs: module.name(a, *args, b=1, **kwargs)`.
         """
         module_name = self[name]['type']
         module_args = dict(self[name]['args'])
