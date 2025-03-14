@@ -3,6 +3,7 @@ from base import BaseDataLoader
 from data_transform import data_transform
 
 class ImageDataLoader(BaseDataLoader):
+    print(' [DEBUG] data_loaders.py BaseDataLoader', BaseDataLoader)
     """
     Loading the data from the given path
     """

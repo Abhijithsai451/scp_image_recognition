@@ -6,6 +6,7 @@ from utils import inf_loop, MetricTracker
 
 
 class Trainer(BaseTrainer):
+    print(' [DEBUG] trainer.py class BaseTrainer',BaseTrainer)
     """
     Trainer class
     """

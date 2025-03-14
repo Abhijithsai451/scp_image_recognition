@@ -5,6 +5,7 @@ from utils import read_json
 
 
 def setup_logging(save_dir, log_config='logger/logger_config.json', default_level=logging.INFO):
+    print(' [DEBUG] logger.py setup_logging function \n')
     """
     Setup logging configuration
     """

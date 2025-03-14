@@ -9,6 +9,7 @@ class BaseModel(nn.Module):
     """
     @abstractmethod
     def forward(self, *inputs):
+        print(' [DEBUG] base_model.py inputs', inputs)
         """
         Forward pass logic
 

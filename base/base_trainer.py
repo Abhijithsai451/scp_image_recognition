@@ -5,6 +5,7 @@ from logger import TensorboardWriter
 
 
 class BaseTrainer:
+    print(' [DEBUG] base_trainer.py BaseTrainer class')
     """
     Base class for all trainers
     """
@@ -13,6 +14,7 @@ class BaseTrainer:
         self.logger = config.get_logger('trainer', config['trainer']['verbosity'])
 
         self.model = model
+        print(' [DEBUG] base_trainer.py model in __init__', model)
         self.criterion = criterion
         self.metric_ftns = metric_ftns
         self.optimizer = optimizer
@@ -58,6 +60,7 @@ class BaseTrainer:
         """
         Full training logic
         """
+        print(' [DEBUG] base_trainer.py 1')
         not_improved_count = 0
         for epoch in range(self.start_epoch, self.epochs + 1):
             result = self._train_epoch(epoch)
