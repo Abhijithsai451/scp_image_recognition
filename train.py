@@ -17,11 +17,11 @@ torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 np.random.seed(SEED)
 
+
 def main(config):
     logger = config.get_logger('train')
     print(" [DEBUG] train.py main(config)")
     data_loader = config.init_obj('data_loader', module_data)
-
     valid_data_loader = data_loader.split_validation()
 
     # build model architecture, then print to console
