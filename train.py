@@ -1,5 +1,6 @@
 import argparse
 import collections
+
 import torch
 import numpy as np
 import data_loader.data_loaders as module_data
@@ -20,7 +21,7 @@ np.random.seed(SEED)
 
 def main(config):
     logger = config.get_logger('train')
-    print(" [DEBUG] train.py main(config)")
+    #logger.log(level= "0",msg=" [DEBUG] train.py main(config)")
     data_loader = config.init_obj('data_loader', module_data)
     valid_data_loader = data_loader.split_validation()
 
@@ -28,10 +29,17 @@ def main(config):
     model = config.init_obj('arch', module_arch)
     logger.info(model)
     print(" [DEBUG] train.py ")
+
     # prepare for (multi-device) GPU training
     device, device_ids = prepare_device(config['n_gpu'])
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    #device = torch.device("mps")
+
+    # For training with GPU (NVIDIA etc)
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    # For Training with GPU in Apple Silicon.
+    device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+    print(f"Using device: {device}")
+
     model = model.to(device)
     if len(device_ids) > 1:
         model = torch.nn.DataParallel(model, device_ids=device_ids)
@@ -44,7 +52,7 @@ def main(config):
     trainable_params = filter(lambda p: p.requires_grad, model.parameters())
     optimizer = config.init_obj('optimizer', torch.optim, trainable_params)
     lr_scheduler = config.init_obj('lr_scheduler', torch.optim.lr_scheduler, optimizer)
-    print(' [DEBUG] train.py metrics', metrics )
+    print(' [DEBUG] train.py metrics', metrics)
     trainer = Trainer(model, criterion, metrics, optimizer,
                       config=config,
                       device=device,

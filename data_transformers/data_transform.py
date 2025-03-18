@@ -1,3 +1,4 @@
+import torch
 from torchvision.transforms import v2
 
 """
@@ -6,11 +7,13 @@ Transforms the images to a specified shape (256x256) so as to give input to the 
 image_transforms = {
     "train": v2.Compose([
         v2.Resize((256, 256)),
+        #v2.ToDtype(torch.float32, scale=True)
         v2.ToTensor()
     ]),
     "test": v2.Compose([
         v2.Resize((256, 256)),
-        v2.ToTensor()])
+        v2.ToTensor()
+    ])
 }
 
 """

@@ -40,6 +40,8 @@ class Trainer(BaseTrainer):
         """
         self.model.train()
         self.train_metrics.reset()
+        print("DEBUG >>>>>>>>>>>>>>>>>>>> Data_loader")
+        print(self.data_loader)
         for batch_idx, (data, target) in enumerate(self.data_loader):
             data, target = data.to(self.device), target.to(self.device)
 
