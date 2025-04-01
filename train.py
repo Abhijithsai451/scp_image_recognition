@@ -1,3 +1,4 @@
+
 import argparse
 import collections
 import torch
@@ -14,6 +15,7 @@ from utils import prepare_device
 # fix random seeds for reproducibility
 SEED = 123
 torch.manual_seed(SEED)
+
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 np.random.seed(SEED)
@@ -28,10 +30,12 @@ def main(config):
     # build model architecture, then print to console
     model = config.init_obj('arch', module_arch)
     logger.info(model)
+    print(torch.cuda.is_available())
 
     # prepare for (multi-device) GPU training
     device, device_ids = prepare_device(config['n_gpu'])
-    device = torch.device("mps")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    #device = torch.device("mps")
     model = model.to(device)
     if len(device_ids) > 1:
         model = torch.nn.DataParallel(model, device_ids=device_ids)
