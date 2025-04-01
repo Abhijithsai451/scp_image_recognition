@@ -1,6 +1,6 @@
-
 import argparse
 import collections
+
 import torch
 import numpy as np
 import data_loader.data_loaders as module_data
@@ -11,11 +11,10 @@ from parse_config import ConfigParser
 from trainer import Trainer
 from utils import prepare_device
 
-# [DEBUG]
+
 # fix random seeds for reproducibility
 SEED = 123
 torch.manual_seed(SEED)
-
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 np.random.seed(SEED)
@@ -24,18 +23,21 @@ def main(config):
     logger = config.get_logger('train')
 
     data_loader = config.init_obj('data_loader', module_data)
-
     valid_data_loader = data_loader.split_validation()
 
     # build model architecture, then print to console
     model = config.init_obj('arch', module_arch)
     logger.info(model)
-    print(torch.cuda.is_available())
 
     # prepare for (multi-device) GPU training
     device, device_ids = prepare_device(config['n_gpu'])
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    #device = torch.device("mps")
+
+    # For training with GPU (NVIDIA etc)
+    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+    # For Training with GPU in Apple Silicon.
+    device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+
     model = model.to(device)
     if len(device_ids) > 1:
         model = torch.nn.DataParallel(model, device_ids=device_ids)
@@ -67,6 +69,7 @@ if __name__ == '__main__':
                       help='path to latest checkpoint (default: None)')
     args.add_argument('-d', '--device', default=None, type=str,
                       help='indices of GPUs to enable (default: all)')
+
 
     CustomArgs = collections.namedtuple('CustomArgs', 'flags type target')
     options = [

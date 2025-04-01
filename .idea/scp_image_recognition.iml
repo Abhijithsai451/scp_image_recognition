@@ -3,8 +3,40 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
+      <excludeFolder url="file://$MODULE_DIR$/data" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/log" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0312_110520" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0312_120405" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_195153" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_195258" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_200025" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_200129" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_200200" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_200601" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_200633" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_201350" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_201415" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_202016" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_202554" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_202943" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_203117" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_203429" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_203452" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_203657" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_211427" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_211619" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_211847" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_211933" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_212026" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_212101" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_212351" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_212427" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_212606" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_213157" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_213604" />
+      <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_214228" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.13" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (GenAI-Essentials)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">
