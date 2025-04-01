@@ -1,6 +1,5 @@
 import torch
 
-print(' [DEBUG] in metric.py')
 def accuracy(output, target):
     with torch.no_grad():
         pred = torch.argmax(output, dim=1)

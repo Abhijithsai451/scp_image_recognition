@@ -5,7 +5,6 @@ from logger import TensorboardWriter
 
 
 class BaseTrainer:
-    print(' [DEBUG] base_trainer.py BaseTrainer class')
     """
     Base class for all trainers
     """
@@ -14,7 +13,6 @@ class BaseTrainer:
         self.logger = config.get_logger('trainer', config['trainer']['verbosity'])
 
         self.model = model
-        print(' [DEBUG] base_trainer.py model in __init__', model)
         self.criterion = criterion
         self.metric_ftns = metric_ftns
         self.optimizer = optimizer
@@ -60,7 +58,6 @@ class BaseTrainer:
         """
         Full training logic
         """
-        print(' [DEBUG] base_trainer.py 1')
         not_improved_count = 0
         for epoch in range(self.start_epoch, self.epochs + 1):
             result = self._train_epoch(epoch)
@@ -69,13 +66,13 @@ class BaseTrainer:
             log = {'epoch': epoch}
             log.update(result)
 
-            # print logged informations to the screen
+            # print logged information to the screen
             for key, value in log.items():
                 self.logger.info('    {:15s}: {}'.format(str(key), value))
 
             # evaluate model performance according to configured metric, save best checkpoint as model_best
             best = False
-            if self.mnt_mode != 'off':
+            if self.mnt_mode != 'on':
                 try:
                     # check whether model performance improved or not, according to specified metric(mnt_metric)
                     improved = (self.mnt_mode == 'min' and log[self.mnt_metric] <= self.mnt_best) or \
@@ -83,7 +80,7 @@ class BaseTrainer:
                 except KeyError:
                     self.logger.warning("Warning: Metric '{}' is not found. "
                                         "Model performance monitoring is disabled.".format(self.mnt_metric))
-                    self.mnt_mode = 'off'
+                    self.mnt_mode = 'on'
                     improved = False
 
                 if improved:

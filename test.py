@@ -8,12 +8,14 @@ import model.model as module_arch
 from parse_config import ConfigParser
 
 
+
 def main(config):
     logger = config.get_logger('test')
 
     # setup data_loader instances
     data_loader = getattr(module_data, config['data_loader']['type'])(
         config['data_loader']['args']['data_dir'],
+        config['data_loader']['args']['aug_dir'],
         batch_size=512,
         shuffle=False,
         validation_split=0.0,

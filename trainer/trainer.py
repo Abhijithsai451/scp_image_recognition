@@ -1,12 +1,12 @@
 import numpy as np
 import torch
+from torch.nn.utils import clip_grad_norm_
 from torchvision.utils import make_grid
 from base import BaseTrainer
 from utils import inf_loop, MetricTracker
 
 
 class Trainer(BaseTrainer):
-    print(' [DEBUG] trainer.py class BaseTrainer',BaseTrainer)
     """
     Trainer class
     """
@@ -40,7 +40,6 @@ class Trainer(BaseTrainer):
         """
         self.model.train()
         self.train_metrics.reset()
-        print("DEBUG >>>>>>>>>>>>>>>>>>>> Data_loader")
         print(self.data_loader)
         for batch_idx, (data, target) in enumerate(self.data_loader):
             data, target = data.to(self.device), target.to(self.device)
@@ -49,6 +48,11 @@ class Trainer(BaseTrainer):
             output = self.model(data)
             loss = self.criterion(output, target)
             loss.backward()
+
+            #Using this for gradient clipping (hyperparameter tuning)
+            clip_grad_norm_(self.model.parameters(), max_norm=1.0)
+
+
             self.optimizer.step()
 
             self.writer.set_step((epoch - 1) * self.len_epoch + batch_idx)
@@ -61,7 +65,8 @@ class Trainer(BaseTrainer):
                     epoch,
                     self._progress(batch_idx),
                     loss.item()))
-                self.writer.add_image('input', make_grid(data.cpu(), nrow=8, normalize=True))
+                if batch_idx % (self.log_step * 4) == 0:
+                    self.writer.add_image('input', make_grid(data.cpu(), nrow=8, normalize=True))
 
             if batch_idx == self.len_epoch:
                 break
@@ -93,13 +98,18 @@ class Trainer(BaseTrainer):
 
                 self.writer.set_step((epoch - 1) * len(self.valid_data_loader) + batch_idx, 'valid')
                 self.valid_metrics.update('loss', loss.item())
+                self.logger.debug('Valid Epoch: {} {} Loss: {:.6f}'.format(
+                    epoch,
+                    self._progress(batch_idx),
+                    loss.item()))
                 for met in self.metric_ftns:
                     self.valid_metrics.update(met.__name__, met(output, target))
                 self.writer.add_image('input', make_grid(data.cpu(), nrow=8, normalize=True))
 
+
         # add histogram of model parameters to the tensorboard
-        for name, p in self.model.named_parameters():
-            self.writer.add_histogram(name, p, bins='auto')
+        """for name, p in self.model.named_parameters():
+            self.writer.add_histogram(name, p, bins='auto')"""
         return self.valid_metrics.result()
 
     def _progress(self, batch_idx):

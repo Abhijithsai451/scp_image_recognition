@@ -11,6 +11,7 @@ from parse_config import ConfigParser
 from trainer import Trainer
 from utils import prepare_device
 
+
 # fix random seeds for reproducibility
 SEED = 123
 torch.manual_seed(SEED)
@@ -18,17 +19,15 @@ torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 np.random.seed(SEED)
 
-
 def main(config):
     logger = config.get_logger('train')
-    #logger.log(level= "0",msg=" [DEBUG] train.py main(config)")
+
     data_loader = config.init_obj('data_loader', module_data)
     valid_data_loader = data_loader.split_validation()
 
     # build model architecture, then print to console
     model = config.init_obj('arch', module_arch)
     logger.info(model)
-    print(" [DEBUG] train.py ")
 
     # prepare for (multi-device) GPU training
     device, device_ids = prepare_device(config['n_gpu'])
@@ -38,7 +37,6 @@ def main(config):
 
     # For Training with GPU in Apple Silicon.
     device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
-    print(f"Using device: {device}")
 
     model = model.to(device)
     if len(device_ids) > 1:
@@ -52,7 +50,7 @@ def main(config):
     trainable_params = filter(lambda p: p.requires_grad, model.parameters())
     optimizer = config.init_obj('optimizer', torch.optim, trainable_params)
     lr_scheduler = config.init_obj('lr_scheduler', torch.optim.lr_scheduler, optimizer)
-    print(' [DEBUG] train.py metrics', metrics)
+
     trainer = Trainer(model, criterion, metrics, optimizer,
                       config=config,
                       device=device,
@@ -64,7 +62,6 @@ def main(config):
 
 
 if __name__ == '__main__':
-    print(' [DEBUG] train.py __main__')
     args = argparse.ArgumentParser(description='SCP Image Recognition')
     args.add_argument('-c', '--config', default="config.json", type=str,
                       help='config file path (default: None)')
@@ -72,6 +69,7 @@ if __name__ == '__main__':
                       help='path to latest checkpoint (default: None)')
     args.add_argument('-d', '--device', default=None, type=str,
                       help='indices of GPUs to enable (default: all)')
+
 
     CustomArgs = collections.namedtuple('CustomArgs', 'flags type target')
     options = [

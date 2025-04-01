@@ -10,22 +10,23 @@
     "args": {
       "data_dir": "data/input_dataset",
       "aug_dir": "data/aug_dataset",
-      "batch_size": 128,
+      "batch_size": 512,
       "shuffle": true,
       "validation_split": 0.1,
-      "num_aug_images": 1,
-      "num_workers": 2
+      "num_aug_images": 10,
+      "num_workers": 5
     }
   },
   "optimizer": {
-    "type": "Adam",
+   "type": "Adam",
     "args": {
-      "lr": 0.001,
-      "weight_decay": 0,
-      "amsgrad": true
+      "lr": 1e-3,
+      "weight_decay": 1e-4,
+      "amsgrad": true,
+      "betas": [0.9, 0.999]
     }
   },
-  "loss": "nll_loss",
+  "loss": "weighted_cross_entropy",
   "metrics": [
     "accuracy",
     "top_k_acc"
@@ -33,17 +34,17 @@
   "lr_scheduler": {
     "type": "StepLR",
     "args": {
-      "step_size": 50,
-      "gamma": 0.1
+      "step_size": 10,
+      "gamma": 0.5
     }
   },
   "trainer": {
-    "epochs": 3,
+    "epochs": 769,
     "save_dir": "saved/",
-    "save_period": 1,
+    "save_period": 4,
     "verbosity": 2,
     "monitor": "min val_loss",
-    "early_stop": 10,
+    "early_stop": 20,
     "tensorboard": true
   }
 }
