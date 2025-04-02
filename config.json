@@ -10,10 +10,10 @@
     "args": {
       "data_dir": "data/input_dataset",
       "aug_dir": "data/aug_dataset",
-      "batch_size": 512,
+      "batch_size": 128,
       "shuffle": true,
-      "validation_split": 0.1,
-      "num_aug_images": 10,
+      "validation_split": 0.2,
+      "num_aug_images": 1,
       "num_workers": 5
     }
   },
@@ -39,9 +39,9 @@
     }
   },
   "trainer": {
-    "epochs": 769,
-    "save_dir": "saved/",
-    "save_period": 4,
+    "epochs": 20,
+    "save_dir": "saved/checkpoint",
+    "save_period": 1,
     "verbosity": 2,
     "monitor": "min val_loss",
     "early_stop": 20,

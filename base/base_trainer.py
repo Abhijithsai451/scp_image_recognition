@@ -58,6 +58,7 @@ class BaseTrainer:
         """
         Full training logic
         """
+        print("[INFO] In train(self) method after trainer.train() call from MAIN method. \n")
         not_improved_count = 0
         for epoch in range(self.start_epoch, self.epochs + 1):
             result = self._train_epoch(epoch)
@@ -69,7 +70,7 @@ class BaseTrainer:
             # print logged information to the screen
             for key, value in log.items():
                 self.logger.info('    {:15s}: {}'.format(str(key), value))
-
+            print("[INFO] Evaluating model performance to save best check point... \n")
             # evaluate model performance according to configured metric, save best checkpoint as model_best
             best = False
             if self.mnt_mode != 'on':
