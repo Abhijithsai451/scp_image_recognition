@@ -10,7 +10,7 @@
     "args": {
       "data_dir": "data/input_dataset",
       "aug_dir": "data/aug_dataset",
-      "batch_size": 1024,
+      "batch_size": 512,
       "shuffle": true,
       "validation_split": 0.2,
       "num_aug_images": 50,
