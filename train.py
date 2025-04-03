@@ -38,7 +38,7 @@ def main(config):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # For Training with GPU in Apple Silicon.
-    # device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+    #device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 
     model = model.to(device)
     if len(device_ids) > 1:
@@ -73,7 +73,7 @@ if __name__ == '__main__':
                       help='config file path (default: None)')
     args.add_argument('-r', '--resume', default=None, type=str,
                       help='path to latest checkpoint (default: None)')
-    args.add_argument('-d', '--device', default="all", type=str,
+    args.add_argument('-d', '--device', default='all', type=str,
                       help='indices of GPUs to enable (default: all)')
 
     CustomArgs = collections.namedtuple('CustomArgs', 'flags type target')

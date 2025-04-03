@@ -32,19 +32,20 @@
     "top_k_acc"
   ],
   "lr_scheduler": {
-    "type": "StepLR",
+    "type": "ReduceLROnPlateau",
     "args": {
-      "step_size": 10,
-      "gamma": 0.5
+      "mode": "max",
+      "patience": 5,
+      "threshold": 1e-4
     }
   },
   "trainer": {
-    "epochs": 20,
-    "save_dir": "saved/checkpoint",
-    "save_period": 1,
+    "epochs": 769,
+    "save_dir": "saved/",
+    "save_period": 5,
     "verbosity": 2,
     "monitor": "min val_loss",
-    "early_stop": 20,
+    "early_stop": 30,
     "tensorboard": true
   }
 }
