@@ -58,6 +58,7 @@ class BaseTrainer:
         """
         Full training logic
         """
+        print("[INFO] In train(self) method after trainer.train() call from MAIN method. \n")
         not_improved_count = 0
         for epoch in range(self.start_epoch, self.epochs + 1):
             result = self._train_epoch(epoch)
@@ -66,13 +67,13 @@ class BaseTrainer:
             log = {'epoch': epoch}
             log.update(result)
 
-            # print logged informations to the screen
+            # print logged information to the screen
             for key, value in log.items():
                 self.logger.info('    {:15s}: {}'.format(str(key), value))
-
+            print("[INFO] Evaluating model performance to save best check point... \n")
             # evaluate model performance according to configured metric, save best checkpoint as model_best
             best = False
-            if self.mnt_mode != 'off':
+            if self.mnt_mode != 'on':
                 try:
                     # check whether model performance improved or not, according to specified metric(mnt_metric)
                     improved = (self.mnt_mode == 'min' and log[self.mnt_metric] <= self.mnt_best) or \
@@ -80,7 +81,7 @@ class BaseTrainer:
                 except KeyError:
                     self.logger.warning("Warning: Metric '{}' is not found. "
                                         "Model performance monitoring is disabled.".format(self.mnt_metric))
-                    self.mnt_mode = 'off'
+                    self.mnt_mode = 'on'
                     improved = False
 
                 if improved:
