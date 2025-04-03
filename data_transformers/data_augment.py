@@ -16,7 +16,7 @@ device = torch.device("cuda" if torch.backends.mps.is_available() else "cpu")
 #device = torch.device("cpu")
 
 def augment_data(worker_id, dataset_split, aug_dir,num_aug_images,aug_exist):
-
+    print("[INFO] : In augment_data() function, checking for existing augmentation...")
     if (aug_exist):
         aug_transform = image_augment.get('train')
         for img_idx, (image, label) in enumerate(dataset_split):

@@ -6,9 +6,9 @@ import model.loss as module_loss
 import model.metric as module_metric
 import model.model as module_arch
 from parse_config import ConfigParser
+import os
 
-
-
+path = os.path.join("saved", "checkpoint", "models", "scp_image_recognition", "0401_225219","model_best.pth")
 def main(config):
     logger = config.get_logger('test')
 
@@ -32,7 +32,7 @@ def main(config):
     metric_fns = [getattr(module_metric, met) for met in config['metrics']]
 
     logger.info('Loading checkpoint: {} ...'.format(config.resume))
-    checkpoint = torch.load(config.resume)
+    checkpoint = torch.load(config.resume, weights_only=False)
     state_dict = checkpoint['state_dict']
     if config['n_gpu'] > 1:
         model = torch.nn.DataParallel(model)
@@ -74,9 +74,9 @@ if __name__ == '__main__':
     args = argparse.ArgumentParser(description='PyTorch Template')
     args.add_argument('-c', '--config', default="config.json", type=str,
                       help='config file path (default: None)')
-    args.add_argument('-r', '--resume', default=None, type=str,
+    args.add_argument('-r', '--resume', default=path, type=str,
                       help='path to latest checkpoint (default: None)')
-    args.add_argument('-d', '--device', default=None, type=str,
+    args.add_argument('-d', '--device', default="all", type=str,
                       help='indices of GPUs to enable (default: all)')
 
     config = ConfigParser.from_args(args)

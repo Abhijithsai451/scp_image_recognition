@@ -22,9 +22,19 @@ class ImageDataLoader(BaseDataLoader):
         self.num_aug_images = num_aug_images
         self.num_workers = num_workers
 
-        num_workers = min(6, os.cpu_count())
+        num_workers = min(5, os.cpu_count())
         if not os.path.isdir(aug_dir):
             dataset = datasets.ImageFolder(root=data_dir, transform=trsfm)
+            dataset_length = len(dataset)
+            chunk_size = dataset_length // num_workers
+            remainder = dataset_length % num_workers
+
+            chunk_lengths = [chunk_size] * num_workers
+            for i in range(remainder):
+                chunk_lengths[i] += 1
+
+            print(f"Dataset length: {dataset_length}")  # Debugging
+            print(f"Chunk lengths: {chunk_lengths}")  # Debugging
             dataset_splits = torch.utils.data.random_split(dataset, [len(dataset) // num_workers] * num_workers)
 
             # Run multiprocessing for augmentation
