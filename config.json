@@ -10,11 +10,11 @@
     "args": {
       "data_dir": "data/input_dataset",
       "aug_dir": "data/aug_dataset",
-      "batch_size": 256,
+      "batch_size": 128,
       "shuffle": true,
       "validation_split": 0.2,
-      "num_aug_images": 1,
-      "num_workers": 5
+      "num_aug_images": 75,
+      "num_workers": 6
     }
   },
   "optimizer": {
@@ -40,12 +40,12 @@
     }
   },
   "trainer": {
-    "epochs": 769,
+    "epochs": 1000,
     "save_dir": "saved/",
     "save_period": 5,
     "verbosity": 2,
     "monitor": "min val_loss",
-    "early_stop": 30,
+    "early_stop": 20,
     "tensorboard": true
   }
 }
