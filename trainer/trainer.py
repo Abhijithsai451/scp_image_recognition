@@ -44,8 +44,18 @@ class Trainer(BaseTrainer):
         for batch_idx, (data, target) in enumerate(self.data_loader):
             data, target = data.to(self.device), target.to(self.device)
 
+            # For DEBUG
+            #print(f"Batch index: {batch_idx}")
+            #print(f"Data shape from DataLoader: {data.shape}")
+            #print(f"Target shape from DataLoader: {target.shape}")
+
+
+
             self.optimizer.zero_grad()
             output = self.model(data)
+
+            #print(f"Output shape after model: {output.shape}")
+            #print(f"Target shape before loss: {target.shape}")
             loss = self.criterion(output, target)
             loss.backward()
 

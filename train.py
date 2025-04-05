@@ -21,11 +21,11 @@ np.random.seed(SEED)
 
 def main(config):
     logger = config.get_logger('train')
-    print("[INFO] In MAIN method: Initializing data_loader variable...")
+    logger.info("[INFO] In MAIN method: Initializing data_loader variable...")
     data_loader = config.init_obj('data_loader', module_data)
-    print("[INFO] Executing data_loader")
+    logger.info("[INFO] Executing data_loader")
     valid_data_loader = data_loader.split_validation()
-    print("[INFO] Executing valid_data_loader")
+    logger.info("[INFO] Executing valid_data_loader")
     # build model architecture, then print to console
     model = config.init_obj('arch', module_arch)
     logger.info("[INFO] Built the model architecture : ")
@@ -35,10 +35,10 @@ def main(config):
     device, device_ids = prepare_device(config['n_gpu'])
 
     # For training with GPU (NVIDIA etc)
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # For Training with GPU in Apple Silicon.
-    #device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
+    device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 
     model = model.to(device)
     if len(device_ids) > 1:
@@ -54,7 +54,7 @@ def main(config):
     optimizer = config.init_obj('optimizer', torch.optim, trainable_params)
     lr_scheduler = config.init_obj('lr_scheduler', torch.optim.lr_scheduler, optimizer)
 
-    print("[INFO] Built optimizer and set criterion  metrics, trainable_params, lr_scheduler")
+    logger.info("[INFO] Built optimizer and set criterion  metrics, trainable_params, lr_scheduler")
 
     trainer = Trainer(model, criterion, metrics, optimizer,
                       config=config,
@@ -73,7 +73,7 @@ if __name__ == '__main__':
                       help='config file path (default: None)')
     args.add_argument('-r', '--resume', default=None, type=str,
                       help='path to latest checkpoint (default: None)')
-    args.add_argument('-d', '--device', default='all', type=str,
+    args.add_argument('-d', '--device', default=None, type=str,
                       help='indices of GPUs to enable (default: all)')
 
     CustomArgs = collections.namedtuple('CustomArgs', 'flags type target')
