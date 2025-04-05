@@ -35,7 +35,7 @@
     "type": "ReduceLROnPlateau",
     "args": {
       "mode": "max",
-      "patience": 3,
+      "patience": 5,
       "threshold": 1e-4
     }
   },
