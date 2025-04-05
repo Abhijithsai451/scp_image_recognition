@@ -13,7 +13,7 @@ device = torch.device("cuda" if torch.backends.mps.is_available() else "cpu")
 #device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 
 # Comment the below line if cuda is present.
-#device = torch.device("cpu")
+device = torch.device("cpu")
 
 def augment_data(worker_id, dataset_split, aug_dir,num_aug_images,aug_exist):
     print("[INFO] : In augment_data() function, checking for existing augmentation...")
