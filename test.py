@@ -81,3 +81,54 @@ if __name__ == '__main__':
 
     config = ConfigParser.from_args(args)
     main(config)
+
+
+"""
+
+
+def classify_image(model, image_path, class_names, device='cpu'):
+
+    # 1. Set model to evaluation mode
+    model.eval()
+    model.to(device)
+    
+    # 2. Load and preprocess the image
+    input_image = Image.open(image_path).convert('RGB')
+    
+    # 3. Define transformations (must match training preprocessing)
+    transform = transforms.Compose([
+        transforms.Resize(256),            # Example - adjust to your model
+        transforms.CenterCrop(224),        # Example - adjust to your model
+        transforms.ToTensor(),
+        transforms.Normalize(              # Example - use your model's normalization
+            mean=[0.485, 0.456, 0.406],
+            std=[0.229, 0.224, 0.225]
+        )
+    ])
+    
+    # 4. Apply transformations and add batch dimension
+    input_tensor = transform(input_image)
+    input_batch = input_tensor.unsqueeze(0).to(device)
+    
+    # 5. Run inference
+    with torch.no_grad():
+        output = model(input_batch)
+    
+    # 6. Get predictions
+    probabilities = F.softmax(output, dim=1)
+    confidence, pred_class_idx = torch.max(probabilities, 1)
+    
+    # 7. Return results
+    return class_names[pred_class_idx.item()], confidence.item()
+
+# Example usage:
+model = ...  # Your trained model
+class_names = ['cat', 'dog', 'bird']  # Your class names
+image_path = 'test_image.jpg'
+
+pred_class, confidence = classify_image(model, image_path, class_names, device='cuda')
+print(f'Predicted: {pred_class} with confidence: {confidence:.2f}')
+
+
+
+"""
