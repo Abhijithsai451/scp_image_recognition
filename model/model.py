@@ -3,7 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from base import BaseModel
 
-"""
+
 class ImageClassificationModel(BaseModel):
 
     #Model Architecture: 32 x 32 Image
@@ -92,3 +92,4 @@ class ImageClassificationModel(BaseModel):
         x = torch.flatten(x, 1)  # Flatten all dimensions except batch
         x = self.classifier(x)
         return x
+"""

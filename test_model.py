@@ -15,7 +15,7 @@ from PIL import Image
 
 
 path = os.path.join("saved", "models", "scp_image_recognition", "0517_200516","model_best.pth")
-image_path = os.path.join("test_data","image.jpeg")
+image_path = os.path.join("test_data","spoon.jpg")
 
 def main(config):
     logger = config.get_logger('test')

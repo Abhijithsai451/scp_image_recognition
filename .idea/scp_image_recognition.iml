@@ -36,7 +36,7 @@
       <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_213604" />
       <excludeFolder url="file://$MODULE_DIR$/saved/models/scp_image_recognition/0314_214228" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.11" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.9 (GenAI-Essentials)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PyDocumentationSettings">
