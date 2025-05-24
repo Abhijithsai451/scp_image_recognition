@@ -22,7 +22,9 @@ class ImageDataLoader(BaseDataLoader):
         self.num_aug_images = num_aug_images
         self.num_workers = num_workers
 
-        num_workers = min(4, os.cpu_count())
+
+        #num_workers = min(5, os.cpu_count())
+        
         if not os.path.isdir(aug_dir):
             dataset = datasets.ImageFolder(root=data_dir, transform=trsfm)
             dataset_length = len(dataset)
