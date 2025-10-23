@@ -11,7 +11,7 @@ from data_transformers.data_augment import augment_data
 class ImageDataLoader(BaseDataLoader):
     """
        Loading the data from the given path
-       """
+    """
 
     def __init__(self, data_dir, aug_dir, batch_size, num_workers, shuffle=True, validation_split=0.0, num_aug_images=1,training=True):
         trsfm = data_transform.image_transforms.get('train')
@@ -51,3 +51,4 @@ class ImageDataLoader(BaseDataLoader):
             print("Augmented dataset already exists. Will proceed to the training directly")
 
         super().__init__(self.dataset, batch_size, shuffle, validation_split, num_workers)
+

@@ -1,5 +1,13 @@
 torch>=1.1
 torchvision
 numpy
+matplotlib
+pandas
 tqdm
 tensorboard>=1.14
+zenml
+mlflow
+passlib
+sqlmodel
+sqlalchemy_utils
+pymysql
