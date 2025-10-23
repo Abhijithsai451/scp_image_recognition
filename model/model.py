@@ -10,20 +10,18 @@ class ImageClassificationModel(BaseModel):
     def __init__(self, num_classes=10):
         super(ImageClassificationModel, self).__init__()
 
-        # Convolutional layers (matches table exactly)
         self.conv1 = nn.Conv2d(3, 16, kernel_size=3, stride=1, padding=1)  # Conv-1
         self.conv2 = nn.Conv2d(16, 32, kernel_size=3, stride=1, padding=1)  # Conv-4
         self.conv3 = nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1)  # Conv-7
         self.conv4 = nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1)  # Conv-9
 
-        # Max pooling layers
         self.pool1 = nn.MaxPool2d(kernel_size=2, stride=2)  # MaxPool-3
         self.pool2 = nn.MaxPool2d(kernel_size=2, stride=2)  # MaxPool-6
         self.pool3 = nn.MaxPool2d(kernel_size=2, stride=2)
-        # Fully connected layer
-        self.fc = nn.Linear(64 * 4 * 4, num_classes)  # Linear-11
 
-        # Dropout (not in table but specified in requirements)
+        self.fc = nn.Linear(64 * 4 * 4, num_classes)
+
+
         self.dropout = nn.Dropout(p=0.2)
 
     def forward(self, x):
