@@ -37,7 +37,7 @@ class ImageDataLoader(BaseDataLoader):
 
             print(f"Dataset length: {dataset_length}")  # Debugging
             print(f"Chunk lengths: {chunk_lengths}")  # Debugging
-            dataset_splits = torch.utils.data.random_split(dataset, [len(dataset) // num_workers] * num_workers)
+            dataset_splits = torch.utils.data.random_split(dataset, chunk_lengths)
 
             # Run multiprocessing for augmentation
             with mp.Pool(num_workers) as pool:
