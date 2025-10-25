@@ -12,7 +12,7 @@ class BaseDataLoader(DataLoader):
     def __init__(self, dataset, batch_size, shuffle, validation_split, num_workers, collate_fn=default_collate,drop_last=False):
         self.validation_split = validation_split
         self.shuffle = shuffle
-
+        self.dataset = dataset
         self.batch_idx = 0
         self.n_samples = len(dataset)
         self.sampler, self.valid_sampler = self._split_sampler(self.validation_split)
@@ -63,4 +63,13 @@ class BaseDataLoader(DataLoader):
         if self.valid_sampler is None:
             return None
         else:
-            return DataLoader(sampler=self.valid_sampler, **self.init_kwargs)
+            return DataLoader(
+            dataset=self.init_kwargs['dataset'],
+            batch_size=self.init_kwargs['batch_size'],
+            sampler=self.valid_sampler, # Use the validation sampler
+            num_workers=self.init_kwargs['num_workers'],
+            collate_fn=self.init_kwargs['collate_fn'],
+            drop_last=self.init_kwargs['drop_last'],
+            shuffle=False # Shuffle is handled by the sampler
+        )
+

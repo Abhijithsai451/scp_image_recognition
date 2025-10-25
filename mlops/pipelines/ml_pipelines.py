@@ -1,10 +1,6 @@
 from zenml.pipelines import pipeline
 from zenml.logger import get_logger
 
-from mlops.steps.data_steps import load_image_data
-from mlops.steps.training_steps import model_trainer
-from mlops.steps.inference_steps import model_loader, inference_step
-
 logger = get_logger(__name__)
 
 @pipeline(enable_cache=False)

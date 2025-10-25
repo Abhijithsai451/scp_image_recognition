@@ -23,14 +23,14 @@ np.random.seed(SEED)
 
 @step(enable_cache=False)
 def model_trainer(
-        data_loaders: Tuple[torch.utils.data.DataLoader, torch.utils.data.DataLoader],
         config_dict: Dict[str, Any],
         model_arch: str,
         loss_function: str,
-        metrics_list: list,
+        metrics: list,
         n_gpu:  int,
         optimizer_config: Dict[str, Any],
         lr_scheduler_config: Dict[str, Any],
+        data_loaders: Optional[Tuple[torch.utils.data.DataLoader, torch.utils.data.DataLoader]] = None,
 ) -> torch.nn.Module:
     """
     ZenMl Step for training the model.
@@ -61,9 +61,9 @@ def model_trainer(
     if len(device_ids) > 1:
         model_instance = torch.nn.DataParallel(model_instance, device_ids=device_ids)
 
-    logger.info(f"Getting functions to handle loss ({loss_function}) and metrics ({metrics_list}), building optimizer ...")
+    logger.info(f"Getting functions to handle loss ({loss_function}) and metrics ({metrics}), building optimizer ...")
     criterion = getattr(module_loss, loss_function)
-    metrics = [getattr(module_metric,met) for met in metrics_list]
+    metrics = [getattr(module_metric,met) for met in metrics]
 
     trainable_params = filter(lambda p: p.requires_grad, model_instance.parameters())
     optimizer = getattr(torch.optim, optimizer_config['type'])(trainable_params, **optimizer_config['args'])
