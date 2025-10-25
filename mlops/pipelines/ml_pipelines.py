@@ -1,18 +1,31 @@
+from pathlib import Path
+from typing import Dict, Any, Optional
+
 from zenml.pipelines import pipeline
 from zenml.logger import get_logger
+
+from mlops.steps.data_steps import load_image_data
+from mlops.steps.training_steps import model_trainer
+from parse_config import ConfigParser
 
 logger = get_logger(__name__)
 
 @pipeline(enable_cache=False)
 def train_pipeline(
-        data_loader_step,
-        model_trainer_step,
+
+        config_dict: Dict[str, Any],
+        resume_path: Optional[Path],
+        model_trainer_params: Dict[str, Any]
+
 ):
     """
-    A pipeline to load the image data, train the model and log it to the MLflow
+    A pipeline to load the image data, train the model and log it to the MLFlow
     """
-    train_dl, valid_dl = data_loader_step()
-    trained_model = model_trainer_step(data_loaders=(train_dl, valid_dl))
+
+    config_object_for_steps = load_image_data(config_dict=config_dict, resume_path=resume_path
+)
+    trained_model = model_trainer(config_input=config_object_for_steps, **model_trainer_params
+)
 
     return trained_model
 

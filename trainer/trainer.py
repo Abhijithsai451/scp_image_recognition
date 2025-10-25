@@ -44,18 +44,9 @@ class Trainer(BaseTrainer):
         for batch_idx, (data, target) in enumerate(self.data_loader):
             data, target = data.to(self.device), target.to(self.device)
 
-            # For DEBUG
-            #print(f"Batch index: {batch_idx}")
-            #print(f"Data shape from DataLoader: {data.shape}")
-            #print(f"Target shape from DataLoader: {target.shape}")
-
-
-
             self.optimizer.zero_grad()
             output = self.model(data)
 
-            #print(f"Output shape after model: {output.shape}")
-            #print(f"Target shape before loss: {target.shape}")
             loss = self.criterion(output, target)
             loss.backward()
 
@@ -81,14 +72,23 @@ class Trainer(BaseTrainer):
             if batch_idx == self.len_epoch:
                 break
         log = self.train_metrics.result()
+        val_log = {}
 
         if self.do_validation:
             val_log = self._valid_epoch(epoch)
             log.update(**{'val_'+k : v for k, v in val_log.items()})
 
         if self.lr_scheduler is not None:
-            #self.lr_scheduler.step()
-            self.lr_scheduler.step(val_log['loss'])
+            if self.do_validation and 'loss' in val_log:
+                self.lr_scheduler.step(val_log['loss'])
+            elif 'loss' in log:
+                self.lr_scheduler.step(log['loss'])
+            else:
+                try:
+                    self.lr_scheduler.step()
+                except TypeError:
+                    self.logger.warning("LR scheduler step failed: No appropriate metric found for stepping, "
+                                        "and scheduler does not support stepping without argument.")
         return log
 
     def _valid_epoch(self, epoch):
@@ -116,7 +116,6 @@ class Trainer(BaseTrainer):
                 for met in self.metric_ftns:
                     self.valid_metrics.update(met.__name__, met(output, target))
                 self.writer.add_image('input', make_grid(data.cpu(), nrow=8, normalize=True))
-
 
         # add histogram of model parameters to the tensorboard
         """for name, p in self.model.named_parameters():

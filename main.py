@@ -13,6 +13,8 @@ from mlops.pipelines.ml_pipelines import train_pipeline, inference_pipeline
 from mlops.steps.data_steps import load_image_data
 from mlops.steps.training_steps import model_trainer
 from mlops.steps.inference_steps import model_loader, inference_step, InferenceParameters, ModelDeploymentParameters
+from mlops.materializer.config_materializer import ConfigParserMaterializer
+
 
 logger = get_logger(__name__)
 
@@ -92,37 +94,25 @@ def main(config: ConfigParser):
 
     # 2 Load the config.json file
     config_dict = config.config
-
-    data_loader_params = {
-        "data_dir": config_dict["data_loader"]['args']["data_dir"],
-        "aug_dir": config_dict["data_loader"]['args']["aug_dir"],
-        "batch_size": config_dict["data_loader"]['args']["batch_size"],
-        "num_workers": config_dict["data_loader"]['args']["num_workers"],
-        "validation_split": config_dict["data_loader"]['args']["validation_split"],
-        "num_aug_images": config_dict["data_loader"]['args']["num_aug_images"],
-        "shuffle": config_dict["data_loader"]['args'].get("shuffle", True)
-    }
-
+    pipeline_resume_path = config._resume_path
     model_trainer_params = {
-        "config_dict": config_dict,
-        "model_arch": config_dict["arch"]["type"].split('.')[-1],
-        "loss_function": config_dict["loss"],
-        "metrics": config_dict["metrics"],
-        "n_gpu": config_dict["n_gpu"],
-        "optimizer_config": config_dict["optimizer"],
-        "lr_scheduler_config": config_dict["lr_scheduler"]
+        #"config_dict": config,
+        "model_arch": config["arch"]["type"].split('.')[-1],
+        "loss_function": config["loss"],
+        "metrics": config["metrics"],
+        "n_gpu": config["n_gpu"],
+        "optimizer_config": config["optimizer"],
+        "lr_scheduler_config": config["lr_scheduler"]
     }
-
-
     # 3 Instantiate the pipeline and run
     logger.info("Starting the ZenML training pipeline")
     training_pipeline_instance = train_pipeline(
-        data_loader_step=load_image_data(**data_loader_params),
-        model_trainer_step=model_trainer(**model_trainer_params)
+        config_dict=config_dict,
+        resume_path=pipeline_resume_path,
+        model_trainer_params=model_trainer_params
     )
     training_pipeline_instance.run(run_name="scp_training_run")
     logger.info("ZenML training pipeline Finished")
-
     # 4 Run the Inference Pipeline
     inference_params = InferenceParameters(
         model_name = f"{config_dict['name']}_model",
