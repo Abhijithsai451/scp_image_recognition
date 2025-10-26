@@ -60,44 +60,55 @@ class BaseTrainer:
         """
         print("[INFO] In train(self) method after trainer.train() call from MAIN method. \n")
         not_improved_count = 0
-        for epoch in range(self.start_epoch, self.epochs + 1):
-            result = self._train_epoch(epoch)
+        best_epoch_log = {}
 
-            # save logged informations into log dict
-            log = {'epoch': epoch}
-            log.update(result)
+        try:
+            for epoch in range(self.start_epoch, self.epochs + 1):
+                result = self._train_epoch(epoch)
 
-            # print logged information to the screen
-            for key, value in log.items():
-                self.logger.info('    {:15s}: {}'.format(str(key), value))
-            print("[INFO] Evaluating model performance to save best check point... \n")
-            # evaluate model performance according to configured metric, save best checkpoint as model_best
-            best = False
-            if self.mnt_mode != 'off':
-                try:
-                    # check whether model performance improved or not, according to specified metric(mnt_metric)
-                    improved = (self.mnt_mode == 'min' and log[self.mnt_metric] <= self.mnt_best) or \
-                               (self.mnt_mode == 'max' and log[self.mnt_metric] >= self.mnt_best)
-                except KeyError:
-                    self.logger.warning("Warning: Metric '{}' is not found. "
-                                        "Model performance monitoring is disabled.".format(self.mnt_metric))
-                    self.mnt_mode = 'off'
+                # save logged information into log dict
+                log = {'epoch': epoch}
+                log.update(result)
+
+                # print logged information to the screen
+                for key, value in log.items():
+                    self.logger.info('    {:15s}: {}'.format(str(key), value))
+                self.logger.info("[INFO] Evaluating model performance to save best check point... \n")
+                # evaluate model performance according to configured metric, save best checkpoint as model_best
+                best = False
+                if self.mnt_mode != 'off':
                     improved = False
+                    if self.mnt_metric in log:
+                        if self.mnt_mode == 'min':
+                            improved = log[self.mnt_metric] <= self.mnt_best
+                        elif self.mnt_mode == 'max':
+                            improved = log[self.mnt_metric] >= self.mnt_best
+                        else:
+                            self.logger.warning(f"Warning: Metric '{self.mnt_metric}' is not found in log for epoch {epoch}. "
+                                            "Model performance monitoring might be affected.")
 
-                if improved:
-                    self.mnt_best = log[self.mnt_metric]
-                    not_improved_count = 0
-                    best = True
-                else:
-                    not_improved_count += 1
+                        if improved:
+                            self.mnt_best = log[self.mnt_metric]
+                            not_improved_count = 0
+                            best = True
+                            best_epoch_log = log
+                        else:
+                            not_improved_count += 1
 
-                if not_improved_count > self.early_stop:
-                    self.logger.info("Validation performance didn\'t improve for {} epochs. "
-                                     "Training stops.".format(self.early_stop))
-                    break
+                        if not_improved_count > self.early_stop:
+                            self.logger.info("Validation performance didn\'t improve for {} epochs. "
+                                             "Training stops.".format(self.early_stop))
+                            break
 
-            if epoch % self.save_period == 0:
-                self._save_checkpoint(epoch, save_best=best)
+                    if epoch % self.save_period == 0:
+                        self._save_checkpoint(epoch, save_best=best)
+            self.logger.info("Training finished successfully.")
+            return best_epoch_log  # Crucially, return the log of the best epoch here
+
+        except Exception as e:
+            self.logger.error(f"An unexpected error occurred during training: {e}", exc_info=True)
+            # Return a dictionary containing error information
+            return {"training_error": str(e), "status": "failed"}
 
     def _save_checkpoint(self, epoch, save_best=False):
         """
