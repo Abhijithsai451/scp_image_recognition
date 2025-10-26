@@ -8,6 +8,7 @@ from typing import Optional
 from pydantic import BaseModel
 
 logger = get_logger(__name__)
+device = torch.device("mps" if torch.backends.mps.is_available() else "cpu")
 
 # Define a step for deploying/registering the model
 class ModelDeploymentParameters(BaseModel):
@@ -51,13 +52,13 @@ def model_loader(params: InferenceParameters)-> torch.nn.Module:
 def inference_step(
         model: torch.nn.Module,
         params: InferenceParameters
-) -> np.ndarray:
+) -> torch.Tensor:
     """
     Performs inference using the loaded model on the new data.
     """
     logger.info(f"Performing inference on the data from: {params.data_path}")
 
-    test_input = torch.randn(1, 3, 224, 224)
+    test_input = torch.randn(1, 3, 224, 224).to(device)
 
     model.eval()
     with torch.no_grad():

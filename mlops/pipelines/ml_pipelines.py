@@ -5,6 +5,7 @@ from zenml.pipelines import pipeline
 from zenml.logger import get_logger
 
 from mlops.steps.data_steps import load_image_data
+from mlops.steps.inference_steps import InferenceParameters, model_loader, inference_step
 from mlops.steps.training_steps import model_trainer
 from parse_config import ConfigParser
 
@@ -31,13 +32,12 @@ def train_pipeline(
 
 @pipeline
 def inference_pipeline(
-        model_loader_step,
-        inference_step,
+        inference_params: InferenceParameters,
 ):
     """
     Pipeline to load a trained model from MLflow registry and perform inference
     """
-    loaded_model = model_loader_step()
-    prediction = inference_step(model=loaded_model)
+    loaded_model = model_loader(params=inference_params)
+    prediction = inference_step(model=loaded_model,params=inference_params)
 
     return prediction

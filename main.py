@@ -111,7 +111,6 @@ def main(config: ConfigParser):
         resume_path=pipeline_resume_path,
         model_trainer_params=model_trainer_params
     )
-    training_pipeline_instance.run(run_name="scp_training_run")
     logger.info("ZenML training pipeline Finished")
     # 4 Run the Inference Pipeline
     inference_params = InferenceParameters(
@@ -121,10 +120,8 @@ def main(config: ConfigParser):
 
     logger.info("starting the Inference pipeline")
     inference_pipeline_instance = inference_pipeline(
-        model_loader_step=model_loader(inference_params=inference_params),
-        inference_step=inference_step(inference_params=inference_params)
+        inference_params=inference_params
     )
-    inference_pipeline_instance.run(run_name = "scp_inference_run")
     logger.info("ZenML Inference pipeline Finished")
 
 if __name__ == "__main__":
